@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Programming_Assignment
 {
-    internal class Terminal
+    class Terminal
     {
+        public string TerminalName { get; set; }
+        public Dictionary<string,Airline> Airlines { get; set; }
     }
 }
