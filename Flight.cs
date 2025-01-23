@@ -4,36 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//==========================================================
+// Student Number	: S10269738E
+// Student Name	: EI EI KHIN
+// Partner Name	: THINN MYAT MYAT HTWE
+//==========================================================
+
+
 namespace S10269056_PRG2Assignment
 {
-    abstract class Flight : IComparable<Flight>
+    public abstract class Flight
     {
         public string FlightNumber { get; set; }
-        public Airlines Airline { get; set; }
+        public string AirlineCode { get; set; }
         public string Origin { get; set; }
         public string Destination { get; set; }
-        public DateTime Time { get; set; }
+        public DateTime ExpectedTime { get; set; }
         public string Status { get; set; }
-        public BoardingGate BoardingGate { get; set; }
+        public string BoardingGate { get; set; }
 
-        protected Flight(string flightNumber, Airline airline, string origin, string destination, string time, string status = "On Time")
+        protected Flight(string flightNumber, string airlineCode, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
         {
             FlightNumber = flightNumber;
-            Airline = airline;
+            AirlineCode = airlineCode;
             Origin = origin;
             Destination = destination;
-            Time = DateTime.ParseExact(time, "HH:mm", null);
+            ExpectedTime = expectedTime;
             Status = status;
+            BoardingGate = null; // Initially unassigned
         }
 
-        public int CompareTo(Flight other)
-        {
-            return Time.CompareTo(other.Time);
-        }
-
-        public override string ToString()
-        {
-            return $"Flight {FlightNumber} ({Airline.Name}): {Origin} -> {Destination}, Time: {Time:hh:mm tt}, Status: {Status}, Gate: {BoardingGate?.Code ?? "None"}";
-        }
+        // Abstract method to calculate fees
+        public abstract int CalculateFee();
     }
 }
