@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Programming_Assignment
+namespace S10269056_PRG2Assignment
 {
     class BoardingGate
     {
