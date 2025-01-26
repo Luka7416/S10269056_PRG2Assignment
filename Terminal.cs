@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 //==========================================================
 namespace S10269056_PRG2Assignment
 {
-    public class Terminal
+    class Terminal
     {
         public string Name { get; set; }
         public Dictionary<string, Airline> Airlines { get; set; }

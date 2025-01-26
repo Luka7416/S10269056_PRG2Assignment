@@ -1,12 +1,4 @@
-﻿//Console.WriteLine("Hi");
-
-//Console.WriteLine("I added a second line.");
-//Console.WriteLine("Hi");
-
-//Console.Write("Enter your number: ");
-
-//Console.WriteLine("hi");
-
+﻿
 using S10269056_PRG2Assignment;
 
 
@@ -48,4 +40,38 @@ void InitializeData()
         terminal.AddBoardingGate(new BoardingGate(parts[0].Trim(),
             bool.Parse(parts[1]), bool.Parse(parts[2]), bool.Parse(parts[3]))); // Gate Name, DDJB, CFFT, LWTT
     }
+
+    //==========================================================
+    // Student Number	: S10269056F
+    // Student Name	: THINN MYAT MYAT HTWE
+    // Partner Name	: EI EI KHIN
+    //==========================================================
+
+    //load flights
+    var flightLines = File.ReadAllLines("flights.csv");
+    foreach (var line in flightLines.Skip(1)) // Skip the header row
+    {
+        var parts = line.Split(',');
+        string flightNumber = parts[0].Trim();
+        string origin = parts[1].Trim();
+        string destination = parts[2].Trim();
+        DateTime expectedTime = DateTime.Parse(parts[3].Trim());
+        string specialRequest = parts.Length > 4 && !string.IsNullOrWhiteSpace(parts[4]) ? parts[4].Trim() : "NORM";
+
+        // Find the airline for the flight
+        string airlineCode = flightNumber.Split(' ')[0];
+        Airline airline = terminal.Airlines.ContainsKey(airlineCode) ? terminal.Airlines[airlineCode] : null;
+
+        // Create flight object based on special request
+        Flight flight = specialRequest switch
+        {
+            "DDJB" => new DDJBFlight(flightNumber, airline, origin, destination, expectedTime),
+            "CFFT" => new CFFTFlight(flightNumber, airline, origin, destination, expectedTime),
+            "LWTT" => new LWTTFlight(flightNumber, airline, origin, destination, expectedTime),
+            _ => new NORMFlight(flightNumber, airline, origin, destination, expectedTime)
+        };
+
+        terminal.AddFlight(flight);
+    }
+
 }
