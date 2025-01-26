@@ -4,18 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//==========================================================
+// Student Number	: S10269056F
+// Student Name	: THINN MYAT MYAT HTWE
+// Partner Name	: EI EI KHIN
+//==========================================================
 namespace S10269056_PRG2Assignment
 {
-    class Airlines
+    public class Airline
     {
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public List<Flight> Flights { get; set; }
+        public string AirlineCode { get; set; }
+        public string AirlineName { get; set; }
+        public List<Flight> Flights { get; set; } // List of flights belonging to this airline
 
-        public Airlines(string code, string name)
+        public Airline(string airlineCode, string airlineName)
         {
-            Code = code;
-            Name = name;
+            AirlineCode = airlineCode;
+            AirlineName = airlineName;
             Flights = new List<Flight>();
         }
 
@@ -24,4 +29,5 @@ namespace S10269056_PRG2Assignment
             Flights.Add(flight);
         }
     }
+
 }

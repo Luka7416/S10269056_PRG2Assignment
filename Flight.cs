@@ -15,6 +15,8 @@ namespace S10269056_PRG2Assignment
 {
     public abstract class Flight
     {
+        internal object Airline;
+
         public string FlightNumber { get; set; }
         public string AirlineCode { get; set; }
         public string Origin { get; set; }

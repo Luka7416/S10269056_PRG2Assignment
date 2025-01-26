@@ -4,30 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//==========================================================
+// Student Number	: S10269056F
+// Student Name	: THINN MYAT MYAT HTWE
+// Partner Name	: EI EI KHIN
+//==========================================================
 namespace S10269056_PRG2Assignment
 {
-    class BoardingGate
+   
+    public class BoardingGate
     {
-        public string Code { get; set; }
-        public List<string> SupportedRequests { get; set; }
-        public Flight AssignedFlight { get; set; }
+        public string GateName { get; set; }
+        public bool SupportsDDJB { get; set; }
+        public bool SupportsCFFT { get; set; }
+        public bool SupportsLWTT { get; set; }
+        public Flight AssignedFlight { get; set; } // Reference to assigned flight
 
-        public BoardingGate(string code, List<string> supportedRequests)
+        public BoardingGate(string gateName, bool supportsDDJB, bool supportsCFFT, bool supportsLWTT)
         {
-            Code = code;
-            SupportedRequests = supportedRequests;
-            AssignedFlight = null;
-        }
-
-        public bool AssignFlight(Flight flight)
-        {
-            if (AssignedFlight == null)
-            {
-                AssignedFlight = flight;
-                flight.BoardingGate = this;
-                return true;
-            }
-            return false;
+            GateName = gateName;
+            SupportsDDJB = supportsDDJB;
+            SupportsCFFT = supportsCFFT;
+            SupportsLWTT = supportsLWTT;
+            AssignedFlight = null; // Initially unassigned
         }
     }
+
+
 }
