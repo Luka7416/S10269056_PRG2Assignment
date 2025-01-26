@@ -14,8 +14,10 @@ namespace S10269056_PRG2Assignment
 {
     public class NORMFlight : Flight
     {
-        public NORMFlight(string flightNumber, string airlineCode, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
-            : base(flightNumber, airlineCode, origin, destination, expectedTime, status) { }
+        public NORMFlight(string flightNumber, Airline airline, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
+            : base(flightNumber, airline, origin, destination, expectedTime, status)
+        {
+        }
 
         public override int CalculateFee()
         {

@@ -15,20 +15,18 @@ namespace S10269056_PRG2Assignment
 {
     public abstract class Flight
     {
-        internal object Airline;
-
         public string FlightNumber { get; set; }
-        public string AirlineCode { get; set; }
+        public Airline Airline { get; set; } // Direct reference to Airline
         public string Origin { get; set; }
         public string Destination { get; set; }
         public DateTime ExpectedTime { get; set; }
         public string Status { get; set; }
-        public string BoardingGate { get; set; }
+        public BoardingGate BoardingGate { get; set; } // Direct reference to BoardingGate
 
-        protected Flight(string flightNumber, string airlineCode, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
+        protected Flight(string flightNumber, Airline airline, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
         {
             FlightNumber = flightNumber;
-            AirlineCode = airlineCode;
+            Airline = airline;
             Origin = origin;
             Destination = destination;
             ExpectedTime = expectedTime;
@@ -36,7 +34,6 @@ namespace S10269056_PRG2Assignment
             BoardingGate = null; // Initially unassigned
         }
 
-        // Abstract method to calculate fees
         public abstract int CalculateFee();
     }
 }

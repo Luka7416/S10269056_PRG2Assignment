@@ -14,17 +14,17 @@ namespace S10269056_PRG2Assignment
 {
     public class DDJBFlight : Flight
     {
-        public DDJBFlight(string flightNumber, string airlineCode, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
-            : base(flightNumber, airlineCode, origin, destination, expectedTime, status) { }
+        public DDJBFlight(string flightNumber, Airline airline, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
+            : base(flightNumber, airline, origin, destination, expectedTime, status) { }
 
         public override int CalculateFee()
         {
             int fee = 300; // Base fee for all flights
-            if (Destination == "Singapore (SIN)") fee += 500;
-            if (Origin == "Singapore (SIN)") fee += 800;
+            if (Destination == "Singapore (SIN)") fee += 500; // Arriving flight fee
+            if (Origin == "Singapore (SIN)") fee += 800; // Departing flight fee
             fee += 300; // Additional fee for DDJB
             return fee;
         }
     }
 }
-}
+
