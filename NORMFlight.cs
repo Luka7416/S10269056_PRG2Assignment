@@ -15,16 +15,21 @@ namespace S10269056_PRG2Assignment
     public class NORMFlight : Flight
     {
         public NORMFlight(string flightNumber, Airline airline, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
-            : base(flightNumber, airline, origin, destination, expectedTime, status)
+            : base(flightNumber, origin, destination, expectedTime, status, airline)
         {
         }
 
-        public override int CalculateFee()
+        public override double CalculateFees()
         {
-            int fee = 300; // Base fee for all flights
-            if (Destination == "Singapore (SIN)") fee += 500; // Arriving flight fee
-            if (Origin == "Singapore (SIN)") fee += 800; // Departing flight fee
-            return fee;
+            double fee = 300; // Base fee for all flights
+            if (Destination == "Singapore (SIN)") fee += 500;
+            if (Origin == "Singapore (SIN)") fee += 800;
+            return fee; // No extra request fee for NORM flights
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + " (Normal Flight)";
         }
     }
 }

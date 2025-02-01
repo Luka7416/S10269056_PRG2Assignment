@@ -14,16 +14,26 @@ namespace S10269056_PRG2Assignment
 {
     public class LWTTFlight : Flight
     {
-        public LWTTFlight(string flightNumber, Airline airline, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
-            : base(flightNumber, airline, origin, destination, expectedTime, status) { }
+        public double RequestFee { get; set; }
 
-        public override int CalculateFee()
+        public LWTTFlight(string flightNumber, Airline airline, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
+            : base(flightNumber, origin, destination, expectedTime, status, airline)
         {
-            int fee = 300; // Base fee for all flights
-            if (Destination == "Singapore (SIN)") fee += 500; // Arriving flight fee
-            if (Origin == "Singapore (SIN)") fee += 800; // Departing flight fee
-            fee += 500; // Additional fee for LWTT
+            RequestFee = 500; // Specific request fee for LWTT flights
+        }
+
+        public override double CalculateFees()
+        {
+            double fee = 300; // Base fee for all flights
+            if (Destination == "Singapore (SIN)") fee += 500;
+            if (Origin == "Singapore (SIN)") fee += 800;
+            fee += RequestFee; // Additional fee for LWTT
             return fee;
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + $", Request Fee: {RequestFee} (LWTT Flight)";
         }
     }
 }
