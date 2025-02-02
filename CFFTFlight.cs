@@ -10,30 +10,33 @@ using System.Threading.Tasks;
 // Partner Name	: THINN MYAT MYAT HTWE
 //==========================================================
 
-namespace S10269056_PRG2Assignment
+using System;
+using PRG2_Assignment;
+
+namespace S10269056_PRG2Assignment;
+
+public class CFFTFlight : Flight
 {
-    public class CFFTFlight : Flight
+    public double RequestFee { get; set; }
+
+    public CFFTFlight(string flightNumber, Airline airline, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
+        : base(flightNumber, origin, destination, expectedTime, status, airline)
     {
-        public double RequestFee { get; set; }
+        RequestFee = 150; // Specific request fee for CFFT flights
+    }
 
-        public CFFTFlight(string flightNumber, Airline airline, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
-            : base(flightNumber, origin, destination, expectedTime, status, airline)
-        {
-            RequestFee = 150; // Specific request fee for CFFT flights
-        }
+    public override double CalculateFees()
+    {
+        double fee = 300; // Base fee for all flights
+        if (Destination == "Singapore (SIN)") fee += 500;
+        if (Origin == "Singapore (SIN)") fee += 800;
+        fee += RequestFee; // Additional fee for CFFT
+        return fee;
+    }
 
-        public override double CalculateFees()
-        {
-            double fee = 300; // Base fee for all flights
-            if (Destination == "Singapore (SIN)") fee += 500;
-            if (Origin == "Singapore (SIN)") fee += 800;
-            fee += RequestFee; // Additional fee for CFFT
-            return fee;
-        }
-
-        public override string ToString()
-        {
-            return base.ToString() + $", Request Fee: {RequestFee} (CFFT Flight)";
-        }
+    public override string ToString()
+    {
+        return base.ToString() + $", Request Fee: {RequestFee} (CFFT Flight)";
     }
 }
+

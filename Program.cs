@@ -1,6 +1,7 @@
 ﻿
 //•	THINN MYAT MYAT HTWE will implement features 2, 3, 5, 6 & 9, and EI EI KHIN will implement features 1, 4, 7 & 8.  
 
+using PRG2_Assignment;
 using S10269056_PRG2Assignment;
 using System.Collections.Generic;
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PRG2_Assignment;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,31 +11,31 @@ using System.Threading.Tasks;
 // Partner Name	: THINN MYAT MYAT HTWE
 //==========================================================
 
-namespace S10269056_PRG2Assignment
+namespace S10269056_PRG2Assignment;
+
+public class DDJBFlight : Flight
 {
-    public class DDJBFlight : Flight
+    public double RequestFee { get; set; }
+
+    public DDJBFlight(string flightNumber, Airline airline, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
+        : base(flightNumber, origin, destination, expectedTime, status, airline)
     {
-        public double RequestFee { get; set; }
+        RequestFee = 300; // Specific request fee for DDJB flights
+    }
 
-        public DDJBFlight(string flightNumber, Airline airline, string origin, string destination, DateTime expectedTime, string status = "Scheduled")
-            : base(flightNumber, origin, destination, expectedTime, status, airline)
-        {
-            RequestFee = 300; // Specific request fee for DDJB flights
-        }
+    public override double CalculateFees()
+    {
+        double fee = 300; // Base fee for all flights
+        if (Destination == "Singapore (SIN)") fee += 500;
+        if (Origin == "Singapore (SIN)") fee += 800;
+        fee += RequestFee; // Additional fee for DDJB
+        return fee;
+    }
 
-        public override double CalculateFees()
-        {
-            double fee = 300; // Base fee for all flights
-            if (Destination == "Singapore (SIN)") fee += 500;
-            if (Origin == "Singapore (SIN)") fee += 800;
-            fee += RequestFee; // Additional fee for DDJB
-            return fee;
-        }
-
-        public override string ToString()
-        {
-            return base.ToString() + $", Request Fee: {RequestFee} (DDJB Flight)";
-        }
+    public override string ToString()
+    {
+        return base.ToString() + $", Request Fee: {RequestFee} (DDJB Flight)";
     }
 }
+
 

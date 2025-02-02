@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PRG2_Assignment;
+using System;
 
 //==========================================================
 // Student Number	: S10269738E
@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 // Partner Name	: THINN MYAT MYAT HTWE
 //==========================================================
 
+namespace S10269056_PRG2Assignment;
 
-namespace S10269056_PRG2Assignment
-{
     public abstract class Flight
     {
         // Properties
@@ -51,4 +50,5 @@ namespace S10269056_PRG2Assignment
                    $"Boarding Gate: {BoardingGate?.GateName ?? "Unassigned"}, Special Request Code: {SpecialRequestCode}";
         }
     }
-}
+
+
