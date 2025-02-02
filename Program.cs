@@ -479,3 +479,277 @@ void ProcessUnassignedFlightsInBulk()
     Console.WriteLine($"Total Flights Assigned: {assignedCount}");
     Console.WriteLine($"Auto-Assignment Percentage: {(initiallyUnassignedFlights > 0 ? ((double)assignedCount / initiallyUnassignedFlights) * 100 : 0):F2}%");
 }
+
+
+//==========================================================
+// Student Number	: S10269056F
+// Student Name	: THINN MYAT MYAT HTWE
+// Partner Name	: EI EI KHIN
+//==========================================================
+void ListAllFlights()
+{
+    Console.WriteLine("\n=============================================");
+    Console.WriteLine("List of Flights for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-24} {"Origin",-20} {"Destination",-20} {"Expected Departure/Arrival Time",-20} ");
+
+    foreach (var flight in terminal.Flights.Values)
+    {
+        Console.WriteLine($"{flight.FlightNumber,-15} {flight.Airline?.Name,-24} {flight.Origin,-20} {flight.Destination,-20} {flight.ExpectedTime}");
+    }
+}
+
+//==========================================================
+// Student Number	: S10269056F
+// Student Name	: THINN MYAT MYAT HTWE
+// Partner Name	: EI EI KHIN
+//==========================================================
+
+void AssignBoardingGate()
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Assign a Boarding Gate to a Flight");
+    Console.WriteLine("=============================================");
+
+    // Get Flight Number
+    Console.Write("Enter Flight Number: ");
+    string flightNumber = Console.ReadLine()?.Trim();
+
+    if (!terminal.Flights.TryGetValue(flightNumber, out var flight))
+    {
+        Console.WriteLine(" Flight not found.");
+        return;
+    }
+
+    //  Get Boarding Gate
+    Console.Write("Enter Boarding Gate Name: ");
+    string gateName = Console.ReadLine()?.Trim();
+
+    if (!terminal.BoardingGates.TryGetValue(gateName, out var gate))
+    {
+        Console.WriteLine(" Gate not found.");
+        return;
+    }
+
+    //  Display Flight and Gate Details *before assignment*
+    Console.WriteLine($"Flight Number: {flight.FlightNumber}");
+    Console.WriteLine($"Origin: {flight.Origin}");
+    Console.WriteLine($"Destination: {flight.Destination}");
+    Console.WriteLine($"Expected Time: {flight.ExpectedTime:dd/M/yyyy h:mm:ss tt}");
+    Console.WriteLine($"Special Request Code: {(string.IsNullOrEmpty(flight.SpecialRequestCode) ? "None" : flight.SpecialRequestCode)}");
+
+    Console.WriteLine($"Boarding Gate Name: {gate.GateName}");
+    Console.WriteLine($"Supports DDJB: {gate.SupportsDDJB}");
+    Console.WriteLine($"Supports CFFT: {gate.SupportsCFFT}");
+    Console.WriteLine($"Supports LWTT: {gate.SupportsLWTT}");
+
+    //  Assign Flight to Gate *after displaying details*
+    if (!gate.AssignFlight(flight))
+    {
+        Console.WriteLine($" Flight {flight.FlightNumber} could not be assigned to Gate {gateName}.");
+        return;
+    }
+
+    //  Ask User to Update Flight Status
+    Console.Write("Would you like to update the status of the flight? (Y/N): ");
+    string updateStatus = Console.ReadLine()?.Trim().ToUpper();
+
+    if (updateStatus == "Y")
+    {
+        Console.WriteLine("1. Delayed");
+        Console.WriteLine("2. Boarding");
+        Console.WriteLine("3. On Time");
+        Console.Write("Please select the new status of the flight: ");
+
+        string statusChoice = Console.ReadLine()?.Trim();
+        flight.Status = statusChoice switch
+        {
+            "1" => "Delayed",
+            "2" => "Boarding",
+            "3" => "On Time",
+            _ => flight.Status
+        };
+    }
+
+    // Display Confirmation Message
+    Console.WriteLine($"Flight {flight.FlightNumber} has been assigned to Boarding Gate {gateName}!");
+}
+
+
+
+//==========================================================
+// Student Number	: S10269056F
+// Student Name	: THINN MYAT MYAT HTWE
+// Partner Name	: EI EI KHIN
+//==========================================================
+
+void CreateFlight()
+{
+    while (true) // Loop to allow multiple flight creation
+    {
+        Console.Write("Enter Flight Number: ");
+        string flightNumber = Console.ReadLine();
+
+        Console.Write("Enter Airline Code: ");
+        string airlineCode = Console.ReadLine().ToUpper(); // Normalize input
+
+        if (!terminal.Airlines.TryGetValue(airlineCode, out var airline))
+        {
+            Console.WriteLine("Invalid Airline Code. Please try again.");
+            continue; // Restart loop to allow user to enter again
+        }
+
+        Console.Write("Enter Origin: ");
+        string origin = Console.ReadLine();
+
+        Console.Write("Enter Destination: ");
+        string destination = Console.ReadLine();
+
+        Console.Write("Enter Expected Departure/Arrival Time (dd/MM/yyyy HH:mm): ");
+        if (!DateTime.TryParseExact(Console.ReadLine(), "dd/M/yyyy HH:mm", null, System.Globalization.DateTimeStyles.None, out var expectedTime))
+        {
+            Console.WriteLine("Invalid date/time format. Please try again.");
+            continue; // Restart loop
+        }
+
+        Console.Write("Enter Special Request Code (CFFT/DDJB/LWTT/None): ");
+        string specialRequest = Console.ReadLine().ToUpper();
+
+        Flight flight = specialRequest switch
+        {
+            "DDJB" => new DDJBFlight(flightNumber, airline, origin, destination, expectedTime),
+            "CFFT" => new CFFTFlight(flightNumber, airline, origin, destination, expectedTime),
+            "LWTT" => new LWTTFlight(flightNumber, airline, origin, destination, expectedTime),
+            _ => new NORMFlight(flightNumber, airline, origin, destination, expectedTime) // Default if None
+        };
+
+        flight.Airline = airline; // Associate flight with the airline
+        terminal.AddFlight(flight);
+
+        Console.WriteLine($"Flight {flightNumber} has been added!");
+
+        // Ask user if they want to add another flight
+        Console.Write("Would you like to add another flight? (Y/N): ");
+        string response = Console.ReadLine().Trim().ToUpper();
+
+        if (response != "Y")
+        {
+            Console.WriteLine("Returning to main menu...");
+            break; // Exit the loop
+        }
+    }
+}
+
+//==========================================================
+// Student Number	: S10269056F
+// Student Name	: THINN MYAT MYAT HTWE
+// Partner Name	: EI EI KHIN
+//==========================================================
+void DisplayFlightSchedule()
+{
+    Console.WriteLine("\n=============================================");
+    Console.WriteLine("Flight Schedule for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-24} {"Origin",-20} {"Destination",-20} {"Expected Departure/Arrival Time",-35} {"Status",-15} {"Boarding Gate",-15}");
+
+    foreach (var flight in terminal.Flights.Values.OrderBy(f => f.ExpectedTime))
+    {
+        Console.WriteLine($"{flight.FlightNumber,-15} {flight.Airline,-24} {flight.Origin,-20} {flight.Destination,-20} {flight.ExpectedTime.ToString("dd/MM/yyyy HH:mm"),-35} {flight.Status,-15} {flight.BoardingGate?.GateName ?? "Unassigned",-15}");
+    }
+}
+
+
+//==========================================================
+// Student Number	: S10269056F
+// Student Name	: THINN MYAT MYAT HTWE
+// Partner Name	: EI EI KHIN
+//==========================================================
+
+void DisplayTotalFeesPerAirline()
+{
+    Console.WriteLine("\n=============================================");
+    Console.WriteLine("Displaying Total Fees Per Airline");
+    Console.WriteLine("=============================================");
+
+    // Step 1: Ensure all flights are assigned a boarding gate
+    var unassignedFlights = terminal.Flights.Values.Where(f => f.BoardingGate == null).ToList();
+
+    if (unassignedFlights.Any())
+    {
+        Console.WriteLine("\n There are flights that have not been assigned a Boarding Gate!");
+        Console.WriteLine("Please ensure all flights are assigned before running this feature again.");
+        return;
+    }
+
+    double totalCollectedFees = 0;
+    double totalDiscounts = 0;
+
+    // Step 2: Process each airline's flights
+    foreach (var airline in terminal.Airlines.Values)
+    {
+        double subtotalFees = 0;
+        double totalDiscount = 0;
+        int arrivingOrDepartingFlights = 0;
+        int earlyOrLateFlights = 0;
+        int specialOriginFlights = 0;
+        int normalFlights = 0;
+
+        var airlineFlights = terminal.Flights.Values.Where(f => f.Airline == airline).ToList();
+
+        foreach (var flight in airlineFlights)
+        {
+            double flightFee = 300; // Base Gate Fee
+
+            // Apply Singapore arrival/departure fees
+            if (flight.Origin == "Singapore (SIN)")
+            {
+                flightFee += 800;
+                arrivingOrDepartingFlights++;
+            }
+            if (flight.Destination == "Singapore (SIN)")
+            {
+                flightFee += 500;
+                arrivingOrDepartingFlights++;
+            }
+
+            // Apply special request fees
+            flightFee += flight switch
+            {
+                CFFTFlight => 150,
+                DDJBFlight => 300,
+                LWTTFlight => 500,
+                _ => 0
+            };
+
+            // Apply promotional discounts
+            if (arrivingOrDepartingFlights >= 3) totalDiscount += 350;
+            if (flight.ExpectedTime.Hour < 11 || flight.ExpectedTime.Hour >= 21) totalDiscount += 110;
+            if (flight.Origin == "Dubai (DXB)" || flight.Origin == "Bangkok (BKK)" || flight.Origin == "Tokyo (NRT)") totalDiscount += 25;
+            if (string.IsNullOrEmpty(flight.SpecialRequestCode) || flight.SpecialRequestCode == "NORM") totalDiscount += 50;
+
+            subtotalFees += flightFee;
+        }
+
+        // Apply additional discount if airline has more than 5 flights
+        if (arrivingOrDepartingFlights > 5)
+        {
+            totalDiscount += subtotalFees * 0.03; // 3% discount
+        }
+
+        totalCollectedFees += subtotalFees;
+        totalDiscounts += totalDiscount;
+
+        // Step 3: Display airline fee breakdown
+        Console.WriteLine($"\nAirline: {airline.Name} ({airline.Code})");
+        Console.WriteLine($"Subtotal Fees: ${subtotalFees:F2}");
+        Console.WriteLine($"Discount Applied: -${totalDiscount:F2}");
+        Console.WriteLine($"Final Total: ${subtotalFees - totalDiscount:F2}");
+    }
+
+    // Step 4: Display overall terminal revenue summary
+    Console.WriteLine("\n=============================================");
+    Console.WriteLine($"Total Airline Fees Collected: ${totalCollectedFees:F2}");
+    Console.WriteLine($"Total Discounts Applied: -${totalDiscounts:F2}");
+    Console.WriteLine($"Final Revenue Collected: ${totalCollectedFees - totalDiscounts:F2}");
+    Console.WriteLine($"Overall Discount Percentage: {(totalDiscounts / totalCollectedFees) * 100:F2}%");
+}
